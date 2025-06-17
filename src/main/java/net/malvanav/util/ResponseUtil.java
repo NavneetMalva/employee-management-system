@@ -1,0 +1,108 @@
+package net.malvanav.util;
+
+import net.malvanav.domain.ErrorResponseDomain;
+import net.malvanav.domain.ResponseDomain;
+import net.malvanav.domain.SuccessResponseDomain;
+import net.malvanav.enums.EmployeeErrorCodes;
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
+import java.util.Objects;
+
+public class ResponseUtil<T> {
+
+    /**
+     * populate success response with a message only
+     * @return
+     */
+    public static <T> ResponseDomain populateSuccessResponseDomain(String message){
+        ResponseDomain responseDomain = new ResponseDomain();
+        SuccessResponseDomain<T> successResponseDomain = new SuccessResponseDomain<T>();
+        successResponseDomain.setResponseMessage(message);
+        responseDomain.setSuccess(successResponseDomain);
+        return responseDomain;
+    }
+
+    /**
+     * populate success response with data
+     * @param data
+     * @return
+     */
+    public static <T> ResponseDomain populateSuccessResponseDomain(T data){
+        ResponseDomain responseDomain = new ResponseDomain();
+        SuccessResponseDomain<T> successResponseDomain = new SuccessResponseDomain<T>();
+        successResponseDomain.setData(data);
+        responseDomain.setSuccess(successResponseDomain);
+        return responseDomain;
+    }
+
+    /**
+     * populate success response with data and message
+     * @param data
+     * @param message
+     * @return
+     */
+    public static <T> ResponseDomain populateSuccessResponseDomain(T data, String message){
+        ResponseDomain responseDomain = new ResponseDomain();
+        SuccessResponseDomain<T> successResponseDomain = new SuccessResponseDomain<T>();
+        successResponseDomain.setData(data);
+        successResponseDomain.setResponseMessage(message);
+        responseDomain.setSuccess(successResponseDomain);
+        return responseDomain;
+    }
+
+    /**
+     * populate success response with List of data and message
+     * @param dataList
+     * @param message
+     * @return
+     */
+    public static <T> ResponseDomain populateSuccessResponseDomain(List<T> dataList, String message){
+        ResponseDomain responseDomain = new ResponseDomain();
+        SuccessResponseDomain<T> successResponseDomain = new SuccessResponseDomain<T>();
+        successResponseDomain.setDataList(dataList);
+        successResponseDomain.setResponseMessage(message);
+        responseDomain.setSuccess(successResponseDomain);
+        return responseDomain;
+    }
+
+    /**
+     * populate error response with data and errorMessage
+     * @param httpStatus
+     * @param errorMessage
+     * @return
+     */
+    public static <T> ResponseDomain populateErrorResponseDomain(HttpStatus httpStatus, String errorMessage){
+        ResponseDomain responseDomain = new ResponseDomain();
+        ErrorResponseDomain errorResponseDomain = new ErrorResponseDomain();
+        errorResponseDomain.setErrorMessage(errorMessage);
+        errorResponseDomain.setStatusCodeMessage(httpStatus);
+        errorResponseDomain.setStatusCode(httpStatus.value());
+        responseDomain.setError(errorResponseDomain);
+        return responseDomain;
+    }
+
+    /**
+     * Populate error response domain with custom error codes and description
+     * @param httpStatus
+     * @param errorMessage
+     * @param errorCodes
+     * @return
+     * @param <T>
+     */
+    public static <T> ResponseDomain populateErrorResponseDomain(HttpStatus httpStatus, String errorMessage, EmployeeErrorCodes errorCodes){
+        ResponseDomain responseDomain = new ResponseDomain();
+        ErrorResponseDomain errorResponseDomain = new ErrorResponseDomain();
+        errorResponseDomain.setStatusCode(httpStatus.value());
+        errorResponseDomain.setStatusCodeMessage(httpStatus);
+        errorResponseDomain.setErrorMessage(errorMessage);
+        if(Objects.nonNull(errorCodes)){
+            errorResponseDomain.setErrorCode(errorCodes.getCode());
+            errorResponseDomain.setErrorDescription(errorCodes.getDescription());
+            errorResponseDomain.setErrorTitle(errorCodes.getTitle());
+        }
+        responseDomain.setError(errorResponseDomain);
+        return responseDomain;
+    }
+
+}
